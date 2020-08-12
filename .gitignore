@@ -1,2 +1,5 @@
 node_modules/
 yarn-error.log
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+
