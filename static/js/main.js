@@ -239,7 +239,8 @@ class App extends Component {
           <div class="header-edition header-main-aside">
             <div class="header-edition-title">The Classic Edition</div>
             <p class="header-edition-body justify">
-              This is <strong>The Vanderbilt Hustler</strong> reimagined in the style of
+              This is <a href="https://vanderbilthustler.com" target="_blank">
+              <strong>The Vanderbilt Hustler</strong></a> reimagined in the style of
               a certain well-known metropolitan newspaper.
               The Classic Edition is built by
               <strong
