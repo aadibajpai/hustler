@@ -1,8 +1,6 @@
 const { Component } = window.Torus;
 const html = window.jdom;
 
-const HN_TOP_URL = "https://hacker-news.firebaseio.com/v0/topstories.json";
-
 const DAYS = [
   "Sunday",
   "Monday",
@@ -57,7 +55,7 @@ function formatRelativeDate(timestamp) {
     return "some time ago";
   }
 
-  const date = new Date(timestamp * 1000);
+  const date = new Date(timestamp);
   const delta = (Date.now() - date) / 1000;
   if (delta < 60) {
     return "< 1 min ago";
@@ -83,30 +81,35 @@ function formatDate() {
 }
 
 function decodeHTMLEntities(s) {
-  const txt = document.createElement("textarea");
-  txt.innerHTML = s;
-  return txt.textContent;
+  const div = document.createElement("div");
+  div.innerHTML = s;
+  return div.textContent || div.innerText || "";
 }
 
-// fetch and normalize stories from a subreddit's "hot" section
+// fetch and normalize posts
 async function fetchStories() {
   const resp = await fetch(
     `https://vanderbilthustler.com/wp-json/wp/v2/posts?per_page=25&_fields=date,title,excerpt,link,featured_media,custom_fields.writer`
   )
     .then((r) => r.json())
-    .catch((e) => console.log(e));
-  const posts = resp[0];
-
-  return posts;
+    .catch(console.error);
+  const stories = await Promise.all(
+    resp.map(async (el) => {
+      const imglink = await fetchStoryImage(el.featured_media);
+      const story = el;
+      story.featured_media = imglink;
+      return story;
+    })
+  );
+  return stories;
 }
 
 async function fetchStoryImage(id) {
   const resp = await fetch(`https://vanderbilthustler.com/wp-json/wp/v2/media/${id}?_fields=guid`)
     .then((r) => r.json())
-    .catch((e) => console.log(e));
-  const link = resp.guid.rendered;
+    .catch(console.error);
 
-  return link;
+  return resp.guid.rendered;
 }
 
 function StoryBody(created, text) {
@@ -120,7 +123,7 @@ function StoryBody(created, text) {
       html`<p>
         ${formatRelativeDate(created)}–${words.slice(0, 100).join(" ")} ...
       </p>`,
-      html`<p class="continued><em>Continued on Page A${R()}</em></p>`,
+      html`<p class="continued"><em>Continued on Page A${R()}</em></p>`,
     ];
   }
 
@@ -143,9 +146,9 @@ function Story(story) {
     date,
   } = story;
   return html`<div class="story">
-    <a href="${link}" target="_blank>
+    <a href="${link}" target="_blank">
       <h2 class="story-title">
-        ${title}
+        ${title.rendered}
       </h2>
     </a>
     <div class="story-byline">
@@ -153,8 +156,8 @@ function Story(story) {
       <span class="story-author">${custom_fields.writer}</span>
     </div>
     <a href="${link}" target="_blank">
-      <img class="story-image" src="${fetchStoryImage(featured_media)}" />
-      <div class="story-content">${StoryBody(date, excerpt)}</div>
+      <img class="story-image" src="${featured_media}" />
+      <div class="story-content">${StoryBody(date, decodeHTMLEntities(excerpt.rendered))}</div>
     </a>
   </div>`;
 }
@@ -176,7 +179,7 @@ class App extends Component {
     this._loading = true;
     this.render();
 
-    this.stories = await fetchStories()
+    this.stories = await fetchStories();
 
     this._loading = false;
     this.render();
@@ -239,8 +242,6 @@ class App extends Component {
               <strong>The Unim.press</strong> is a Reddit reader in the style of
               a certain well-known metropolitan newspaper. You're currently
               reading
-              ${this.allTime ? "all-time top posts of " : ""}/r/${this
-                .subreddit}.
               The Unim.press is built by
               <strong
                 ><a target="_blank" href="https://thesephist.com"
@@ -279,13 +280,6 @@ class App extends Component {
         </p>
       </footer>
     </div>`;
-  }
-  render(...args) {
-    super.render(...args);
-
-    // Simplest way to keep the "selected" value of the subreddit
-    // selector in check is to just set it after render.
-    this.node.querySelector("select").value = this.subreddit;
   }
 }
 
