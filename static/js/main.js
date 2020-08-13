@@ -148,7 +148,7 @@ function Story(story) {
   return html`<div class="story">
     <a href="${link}" target="_blank">
       <h2 class="story-title">
-        ${title.rendered}
+        ${decodeHTMLEntities(title.rendered)}
       </h2>
     </a>
     <div class="story-byline">
@@ -230,8 +230,8 @@ class App extends Component {
       <header class="flex-column">
         <div class="header-main flex-row">
           <div class="header-tagline header-main-aside">
-            "All the Reddit <br />
-            That's Fit to Uwu"
+            "All the Hustler <br />
+            That's Fit to UwU"
           </div>
           <a href="/" class="masthead-link">
             <h1 class="fraktur masthead">The Vanderbilt Hustler</h1>
@@ -239,24 +239,23 @@ class App extends Component {
           <div class="header-edition header-main-aside">
             <div class="header-edition-title">The Classic Edition</div>
             <p class="header-edition-body justify">
-              <strong>The Unim.press</strong> is a Reddit reader in the style of
-              a certain well-known metropolitan newspaper. You're currently
-              reading
-              The Unim.press is built by
+              This is <strong>The Vanderbilt Hustler</strong> reimagined in the style of
+              a certain well-known metropolitan newspaper.
+              The Classic Edition is built by
               <strong
-                ><a target="_blank" href="https://thesephist.com"
+                ><a target="_blank" href="https://aadibajpai.com"
                   >Aadi Bajpai</a
                 ></strong
               >
               and open-source on GitHub at
-              <a target="_blank" href="https://github.com/thesephist/unim.press"
-                >thesephist/unim.press</a
+              <a target="_blank" href="https://github.com/aadibajpai/hustler"
+                >aadibajpai/hustler</a
               >.
             </p>
           </div>
         </div>
         <div class="header-bar flex-row">
-          <div class="header-vol bar-aside">VOL. CLXX . . . No. 3.14159</div>
+          <div class="header-vol bar-aside">VOL. CLXX . . . No. ${Math.random > 0.5 ? 3.14159 : 4.2069}</div>
           <div class="header-nyc">Nashville, ${formatDate()}</div>
           <div class="header-controls bar-aside flex-row">
           </div>
@@ -267,15 +266,15 @@ class App extends Component {
         : storiesSection}
       <footer>
         <p>
-          The Unim.press is a project by
-          <a target="_blank" href="https://thesephist.com">@thesephist</a>. It's
+          The Vanderbilt Hustler: Classic Edition is a project by
+          <a target="_blank" href="https://aadibajpai.com">Aadi Bajpai</a>. It's
           built with
-          <a target="_blank" href="https://github.com/thesephist/torus"
-            >Torus</a
+          <a target="_blank" href="https://github.com/thesephist/unim.press"
+            >unim.press</a
           >
           and open source on GitHub at
-          <a target="_blank" href="https://github.com/thesephist/unim.press"
-            >thesephist/unim.press</a
+          <a target="_blank" href="https://github.com/aadibajpai/hustler"
+            >aadibajpai/hustler</a
           >.
         </p>
       </footer>
