@@ -242,7 +242,8 @@ class App extends Component {
             <p class="header-edition-body justify">
               This is <a href="https://vanderbilthustler.com" target="_blank">
               <strong>The Vanderbilt Hustler</strong></a> reimagined in the style of
-              a certain well-known metropolitan newspaper.
+              a certain well-known metropolitan newspaper. You're currently reading the
+              25 latest stories from the website.
             </p>
           </div>
         </div>
