@@ -89,12 +89,13 @@ function decodeHTMLEntities(s) {
 // fetch and normalize posts
 async function fetchStories() {
   const resp = await fetch(
-    `https://vanderbilthustler.com/wp-json/wp/v2/posts?per_page=25&_fields=date,title,excerpt,link,featured_media,custom_fields.writer`
+    `https://vanderbilthustler.com/wp-json/wp/v2/posts?per_page=30&_fields=date,title,excerpt,link,featured_media,custom_fields.writer`
   )
     .then((r) => r.json())
     .catch(console.error);
   const stories = await Promise.all(
-    resp.map(async (el) => {
+    // remove posts w/o featured image
+    resp.filter(el => el.featured_media).map(async (el) => {
       const imglink = await fetchStoryImage(el.featured_media);
       const story = el;
       story.featured_media = imglink;
@@ -256,7 +257,7 @@ class App extends Component {
           </div>
         </div>
         <div class="header-bar flex-row">
-          <div class="header-vol bar-aside">VOL. CLXX . . . No. ${Math.random > 0.5 ? 3.14159 : 4.2069}</div>
+          <div class="header-vol bar-aside">VOL. CLXX . . . No. ${Math.random() > 0.5 ? 3.14159 : 4.2069}</div>
           <div class="header-nyc">Nashville, ${formatDate()}</div>
           <div class="header-controls bar-aside flex-row">
           </div>
