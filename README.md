@@ -1,11 +1,11 @@
-# Unim.Press 📰
+# The Vanderbilt Hustler: Classic Edition 📰
 
-[Unim.Press](https://unim.press) is a Reddit front-page reader in the style of The New York Times. You can browse the front page of any subreddit by going to `unim.press/#subreddit_name`.
+[The Vanderbilt Hustler](https://vanderbilthustler.com) is the official student newspaper of Vanderbilt University.
 
-Unim.Press is built with [Torus](https://github.com/thesephist/torus) as a static, single page application, and uses the public Reddit API.
+The Classic Edition is a reimagining of it in the style of The New York Times just because I could.
 
-- Discuss it on [Hacker News](https://news.ycombinator.com/item?id=23658721).
-- Unim.press on [/r/InternetIsBeautiful](https://old.reddit.com/r/InternetIsBeautiful/comments/hzd04h/read_reddit_like_a_newspaper/)
-- See it on [Product Hunt](https://www.producthunt.com/posts/the-unim-press)
+This is built with [unim.press](https://github.com/thesephist/unim.press) as a static, single page application, and uses the public Hustler Wordpress API.
 
-![Screenshot](static/img/screenshot.jpg)
+![Screenshot](static/img/screenshot.png)
+
+Special thanks to [@diogoscf](https://github.com/diogoscf) for making Promises on my behalf (I'm simply not ready for that kind of commitment).

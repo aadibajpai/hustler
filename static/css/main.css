@@ -283,7 +283,7 @@ header,
 .center-spread .story-title {
   text-transform: uppercase;
   font-size: 2.4em;
-  text-align: justify;
+  /*text-align: justify;*/
 }
 
 .center-spread .story-source {

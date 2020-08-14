@@ -243,16 +243,6 @@ class App extends Component {
               This is <a href="https://vanderbilthustler.com" target="_blank">
               <strong>The Vanderbilt Hustler</strong></a> reimagined in the style of
               a certain well-known metropolitan newspaper.
-              The Classic Edition is built by
-              <strong
-                ><a target="_blank" href="https://aadibajpai.com"
-                  >Aadi Bajpai</a
-                ></strong
-              >
-              and open-source on GitHub at
-              <a target="_blank" href="https://github.com/aadibajpai/hustler"
-                >aadibajpai/hustler</a
-              >.
             </p>
           </div>
         </div>
