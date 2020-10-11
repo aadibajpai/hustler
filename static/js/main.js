@@ -80,6 +80,12 @@ function formatDate() {
   } ${date.getDate()}, ${date.getFullYear()}`;
 }
 
+// return list of writers as formatted string
+function formatWriters(writers) {
+  writer = writers[writers.length - 1]
+  return writers.length > 1 ? writers.slice(0, -1).join(", ") + " and " + writer : writer
+}
+
 function decodeHTMLEntities(s) {
   const div = document.createElement("div");
   div.innerHTML = s;
@@ -154,7 +160,7 @@ function Story(story) {
     </a>
     <div class="story-byline">
       By
-      <span class="story-author">${custom_fields.writer}</span>
+      <span class="story-author">${formatWriters(custom_fields.writer)}</span>
     </div>
     <a href="${link}" target="_blank">
       <img class="story-image" src="${featured_media}" />
