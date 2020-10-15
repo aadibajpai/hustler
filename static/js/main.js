@@ -116,7 +116,7 @@ async function fetchStoryImage(id) {
     .then((r) => r.json())
     .catch(console.error);
 
-  return resp.guid.rendered;
+  return resp.guid && resp.guid.rendered;
 }
 
 function StoryBody(created, text) {
@@ -163,7 +163,7 @@ function Story(story) {
       <span class="story-author">${formatWriters(custom_fields.writer)}</span>
     </div>
     <a href="${link}" target="_blank">
-      <img class="story-image" src="${featured_media}" />
+       ${featured_media ? html`<img class="story-image" src="${featured_media}" />` : null}
       <div class="story-content">${StoryBody(date, decodeHTMLEntities(excerpt.rendered))}</div>
     </a>
   </div>`;
