@@ -95,7 +95,7 @@ function decodeHTMLEntities(s) {
 // fetch and normalize posts
 async function fetchStories() {
   const resp = await fetch(
-    `https://vanderbilthustler.com/wp-json/wp/v2/posts?per_page=30&_fields=date,title,excerpt,link,featured_media,custom_fields.writer`
+    `https://vanderbilthustler.com/wp-json/wp/v2/posts?per_page=1&_fields=date,title,content,link,featured_media,custom_fields.writer`
   )
     .then((r) => r.json())
     .catch(console.error);
@@ -124,17 +124,22 @@ function StoryBody(created, text) {
     text = `Lorem ipsum dolor sit amet, ei mel cibo meliore instructior, eam te etiam clita. Id falli facilis intellegam his, eu populo dolorem offendit eam. Noster nemore luptatum ex sit. Ei sea melius definitiones.`;
   }
 
-  const words = text.split(" ");
-  if (words.length > 100) {
-    return [
-      html`<p>
-        ${formatRelativeDate(created)}–${words.slice(0, 100).join(" ")} ...
-      </p>`,
-      html`<p class="continued"><em>Continued on Page A${R()}</em></p>`,
-    ];
+  // const words = text.split(" ");
+  // if (words.length > 100) {
+  //   return [
+  //     html`<p>
+  //       ${formatRelativeDate(created)}–${words.slice(0, 100).join(" ")} ...
+  //     </p>`,
+  //     html`<p class="continued"><em>Continued on Page A${R()}</em></p>`,
+  //   ];
+  // }
+  let paras = text.replace("<p>", "").split("</p>")
+  let ret = [html`<p>${formatRelativeDate(created)}–</p>`]
+  for (para of paras) {
+    ret.push(html`<p>${decodeHTMLEntities(para)}</p>`)
   }
 
-  return html`<p>${formatRelativeDate(created)}–${text}</p>`;
+  return ret;
 }
 
 // All stories that appear have the same DOM structure, displayed
@@ -148,7 +153,7 @@ function Story(story) {
     title,
     custom_fields,
     link,
-    excerpt,
+    content,
     featured_media,
     date,
   } = story;
@@ -162,10 +167,8 @@ function Story(story) {
       By
       <span class="story-author">${formatWriters(custom_fields.writer)}</span>
     </div>
-    <a href="${link}" target="_blank">
-       ${featured_media ? html`<img class="story-image" src="${featured_media}" />` : null}
-      <div class="story-content">${StoryBody(date, decodeHTMLEntities(excerpt.rendered))}</div>
-    </a>
+    ${featured_media ? html`<img class="story-image" src="${featured_media}" />` : null}
+    <div class="story-content">${StoryBody(date, content.rendered)}</div>
   </div>`;
 }
 
