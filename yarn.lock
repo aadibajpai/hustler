@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"prettier@^2.0.5":
-  "integrity" "sha512-7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg=="
-  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.0.5.tgz"
-  "version" "2.0.5"
+"prettier@^2.5.1":
+  "integrity" "sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg=="
+  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.5.1.tgz"
+  "version" "2.5.1"

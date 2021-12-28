@@ -11,6 +11,6 @@
     "dev": "python3 -m http.server 8000 --directory ./static"
   },
   "devDependencies": {
-    "prettier": "^2.0.5"
+    "prettier": "^2.5.1"
   }
 }
