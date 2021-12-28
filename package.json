@@ -7,7 +7,8 @@
   "author": "Linus Lee <linus@thesephist.com>",
   "license": "MIT",
   "scripts": {
-    "fmt": "prettier --write ./static/js/main.js"
+    "fmt": "prettier --write ./static/js/main.js",
+    "dev": "python3 -m http.server 8000 --directory ./static"
   },
   "devDependencies": {
     "prettier": "^2.0.5"
