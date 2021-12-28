@@ -83,7 +83,7 @@ function formatDate() {
 
 // return list of writers as formatted string
 function formatWriters(writers) {
-  writer = writers[writers.length - 1]
+  const writer = writers[writers.length - 1]
   return writers.length > 1 ? writers.slice(0, -1).join(", ") + " and " + writer : writer
 }
 
@@ -117,7 +117,7 @@ async function fetchStoryImage(id) {
     .then((r) => r.json())
     .catch(console.error);
 
-  return resp.guid && resp.guid.rendered;
+  return resp.guid?.rendered;
 }
 
 function StoryBody(created, text) {
