@@ -41,7 +41,7 @@ select {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .flex-row {
@@ -290,7 +290,7 @@ header,
 }
 
 .center-spread {
-  width: 800px;
+  width: 600px;
 }
 
 .center-spread .story-title {
