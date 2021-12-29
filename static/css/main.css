@@ -185,6 +185,7 @@ header,
 }
 
 .story-title:hover,
+.story-content:hover,
 .story-author:hover {
   text-decoration: underline;
 }

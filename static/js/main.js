@@ -131,22 +131,17 @@ function StoryBody(created, text) {
     text = `Lorem ipsum dolor sit amet, ei mel cibo meliore instructior, eam te etiam clita. Id falli facilis intellegam his, eu populo dolorem offendit eam. Noster nemore luptatum ex sit. Ei sea melius definitiones.`;
   }
 
-  // const words = text.split(" ");
-  // if (words.length > 100) {
-  //   return [
-  //     html`<p>
-  //       ${formatRelativeDate(created)}–${words.slice(0, 100).join(" ")} ...
-  //     </p>`,
-  //     html`<p class="continued"><em>Continued on Page A${R()}</em></p>`,
-  //   ];
-  // }
-  let paras = text.replace("<p>", "").split("</p>");
-  let ret = [html`<p>${formatRelativeDate(created)}–</p>`];
-  for (para of paras) {
-    ret.push(html`<p>${decodeHTMLEntities(para)}</p>`);
+  const words = text.split(" ");
+  if (words.length > 100) {
+    return [
+      html`<p>
+        ${formatRelativeDate(created)}–${words.slice(0, 100).join(" ")} ...
+      </p>`,
+      html`<p class="continued"><em>Continued on Page A${R()}</em></p>`,
+    ];
   }
 
-  return ret;
+  return html`<p>${formatRelativeDate(created)}–${text}</p>`;
 }
 
 // All stories that appear have the same DOM structure, displayed
@@ -256,7 +251,7 @@ class App extends Component {
                 <strong>The Vanderbilt Hustler</strong></a
               >
               reimagined in the style of a certain well-known metropolitan
-              newspaper. You're currently reading the 25 latest stories from the
+              newspaper. You're currently reading the 30 latest stories from the
               website.
             </p>
           </div>
