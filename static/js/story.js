@@ -62,7 +62,8 @@ function formatRelativeDate(timestamp) {
   } else if (delta < 3600) {
     return `${~~(delta / 60)} min ago`;
   } else if (delta < 86400) {
-    return `${~~(delta / 3600)} hrs ago`;
+    const day = ~~(delta / 3600);
+    return day === 1 ? `${day} hr ago` : `${day} hrs ago`;
   } else if (delta < 86400 * 2) {
     return "yesterday";
   } else if (delta < 86400 * 3) {
@@ -82,7 +83,7 @@ function formatDate() {
 
 // return list of writers as formatted string
 function formatWriters(writers) {
-  writer = writers[writers.length - 1];
+  const writer = writers[writers.length - 1];
   return writers.length > 1
     ? writers.slice(0, -1).join(", ") + " and " + writer
     : writer;
@@ -102,7 +103,6 @@ async function fetchStory(id) {
     .then((r) => r.json())
     .then((j) => [j]) // put single story in array for compatibility
     .catch(console.error);
-  console.log(resp);
   const stories = await Promise.all(
     // remove posts w/o featured image
     resp
@@ -114,7 +114,6 @@ async function fetchStory(id) {
         return story;
       })
   );
-  console.log(stories);
   return stories;
 }
 
@@ -125,7 +124,7 @@ async function fetchStoryImage(id) {
     .then((r) => r.json())
     .catch(console.error);
 
-  return resp.guid && resp.guid.rendered;
+  return resp.guid?.rendered;
 }
 
 function StoryBody(created, text) {
@@ -264,7 +263,7 @@ class App extends Component {
                 <strong>The Vanderbilt Hustler</strong></a
               >
               reimagined in the style of a certain well-known metropolitan
-              newspaper. You're currently reading the 30 latest stories from the
+              newspaper. You're currently reading the 25 latest stories from the
               website.
             </p>
           </div>

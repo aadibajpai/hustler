@@ -251,7 +251,7 @@ class App extends Component {
                 <strong>The Vanderbilt Hustler</strong></a
               >
               reimagined in the style of a certain well-known metropolitan
-              newspaper. You're currently reading the 30 latest stories from the
+              newspaper. You're currently reading the 25 latest stories from the
               website.
             </p>
           </div>
