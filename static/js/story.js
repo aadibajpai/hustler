@@ -62,8 +62,7 @@ function formatRelativeDate(timestamp) {
   } else if (delta < 3600) {
     return `${~~(delta / 60)} min ago`;
   } else if (delta < 86400) {
-    const day = ~~(delta / 3600);
-    return day === 1 ? `${day} hr ago` : `${day} hrs ago`;
+    return `${~~(delta / 3600)} hrs ago`;
   } else if (delta < 86400 * 2) {
     return "yesterday";
   } else if (delta < 86400 * 3) {
@@ -83,7 +82,7 @@ function formatDate() {
 
 // return list of writers as formatted string
 function formatWriters(writers) {
-  const writer = writers[writers.length - 1];
+  writer = writers[writers.length - 1];
   return writers.length > 1
     ? writers.slice(0, -1).join(", ") + " and " + writer
     : writer;
@@ -96,12 +95,14 @@ function decodeHTMLEntities(s) {
 }
 
 // fetch and normalize posts
-async function fetchStories() {
+async function fetchStory(id) {
   const resp = await fetch(
-    `https://vanderbilthustler.com/wp-json/wp/v2/posts?per_page=30&_fields=id,date,title,excerpt,link,featured_media,custom_fields.writer`
+    `https://vanderbilthustler.com/wp-json/wp/v2/posts/${id}?_fields=date,title,content,link,featured_media,custom_fields.writer`
   )
     .then((r) => r.json())
+    .then((j) => [j]) // put single story in array for compatibility
     .catch(console.error);
+  console.log(resp);
   const stories = await Promise.all(
     // remove posts w/o featured image
     resp
@@ -113,6 +114,7 @@ async function fetchStories() {
         return story;
       })
   );
+  console.log(stories);
   return stories;
 }
 
@@ -123,7 +125,7 @@ async function fetchStoryImage(id) {
     .then((r) => r.json())
     .catch(console.error);
 
-  return resp.guid?.rendered;
+  return resp.guid && resp.guid.rendered;
 }
 
 function StoryBody(created, text) {
@@ -131,17 +133,22 @@ function StoryBody(created, text) {
     text = `Lorem ipsum dolor sit amet, ei mel cibo meliore instructior, eam te etiam clita. Id falli facilis intellegam his, eu populo dolorem offendit eam. Noster nemore luptatum ex sit. Ei sea melius definitiones.`;
   }
 
-  const words = text.split(" ");
-  if (words.length > 100) {
-    return [
-      html`<p>
-        ${formatRelativeDate(created)}–${words.slice(0, 100).join(" ")} ...
-      </p>`,
-      html`<p class="continued"><em>Continued on Page A${R()}</em></p>`,
-    ];
+  // const words = text.split(" ");
+  // if (words.length > 100) {
+  //   return [
+  //     html`<p>
+  //       ${formatRelativeDate(created)}–${words.slice(0, 100).join(" ")} ...
+  //     </p>`,
+  //     html`<p class="continued"><em>Continued on Page A${R()}</em></p>`,
+  //   ];
+  // }
+  let paras = text.replace("<p>", "").split("</p>");
+  let ret = [html`<p>${formatRelativeDate(created)}–</p>`];
+  for (para of paras) {
+    ret.push(html`<p>${decodeHTMLEntities(para)}</p>`);
   }
 
-  return html`<p>${formatRelativeDate(created)}–${text}</p>`;
+  return ret;
 }
 
 // All stories that appear have the same DOM structure, displayed
@@ -151,23 +158,24 @@ function Story(story) {
     return null;
   }
 
-  const { title, custom_fields, id, excerpt, featured_media, date } = story;
+  const { title, custom_fields, link, content, featured_media, date } = story;
   return html`<div class="story">
-    <a href="/story.html?id=${id}">
+    <a href="${link}" target="_blank">
       <h2 class="story-title">${decodeHTMLEntities(title.rendered)}</h2>
     </a>
     <div class="story-byline">
       By
       <span class="story-author">${formatWriters(custom_fields.writer)}</span>
     </div>
-    <a href="/story.html?id=${id}">
-      ${featured_media
-        ? html`<img class="story-image" src="${featured_media}" />`
-        : null}
-      <div class="story-content">
-        ${StoryBody(date, decodeHTMLEntities(excerpt.rendered))}
-      </div>
-    </a>
+    ${featured_media
+      ? html`<img
+          class="story-image full-story-image"
+          src="${featured_media}"
+        />`
+      : null}
+    <div class="story-content full-story-content">
+      ${StoryBody(date, content.rendered)}
+    </div>
   </div>`;
 }
 
@@ -188,7 +196,10 @@ class App extends Component {
     this._loading = true;
     this.render();
 
-    this.stories = await fetchStories();
+    const urlParams = new URLSearchParams(window.location.search);
+    const storyID = urlParams.get("id");
+
+    this.stories = await fetchStory(storyID);
 
     this._loading = false;
     this.render();
@@ -215,9 +226,11 @@ class App extends Component {
         <div class="left-sidebar flex-column smaller">
           ${leftSidebar.map(Story)}
         </div>
-        <div class="spreads flex-column">
-          <div class="top flex-row">
-            <div class="center-spread">${centerSpreads.map(Story)}</div>
+        <div class="spreads flex-column full-flex">
+          <div class="top flex-row full-flex">
+            <div class="center-spread full-story>${centerSpreads.map(
+              Story
+            )}</div>
             <div class="sidebar sidebar-spread flex-column smaller">
               ${sidebarSpread.map(Story)}
             </div>

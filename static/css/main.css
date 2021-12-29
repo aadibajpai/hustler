@@ -181,6 +181,7 @@ header,
   box-sizing: border-box;
   width: 100%;
   overflow: hidden;
+  word-break: break-word;
 }
 
 .story-title:hover,
@@ -211,7 +212,8 @@ header,
   filter: grayscale(100%);
 }
 
-.story:hover .story-image {
+.story:hover .story-image,
+.full-story-image {
   filter: none;
 }
 
@@ -274,6 +276,18 @@ header,
 
 .spreads {
   width: 900px;
+}
+
+.full-story {
+  width: 900px !important;
+}
+
+.full-story-content:hover {
+  text-decoration: none;
+}
+
+.full-flex {
+  align-items: center;
 }
 
 .center-spread {
