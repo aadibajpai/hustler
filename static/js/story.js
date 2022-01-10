@@ -143,7 +143,7 @@ function StoryBody(created, text) {
   // }
   let paras = text.replace("<p>", "").split("</p>");
   let ret = [html`<p>${formatRelativeDate(created)}–</p>`];
-  for (para of paras) {
+  for (const para of paras) {
     ret.push(html`<p>${decodeHTMLEntities(para)}</p>`);
   }
 
