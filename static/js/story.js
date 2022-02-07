@@ -141,12 +141,14 @@ function StoryBody(created, text) {
   //     html`<p class="continued"><em>Continued on Page A${R()}</em></p>`,
   //   ];
   // }
-  let paras = text.replace("<p>", "").split("</p>");
+  // let paras = text.replace("<p>", "").split("</p>");
+  // for (const para of paras) {
+  //   ret.push(html`<p>${decodeHTMLEntities(para)}</p>`);
+  // }
   let ret = [html`<p>${formatRelativeDate(created)}–</p>`];
-  for (const para of paras) {
-    ret.push(html`<p>${decodeHTMLEntities(para)}</p>`);
-  }
-
+  let content = document.createElement("div");
+  content.innerHTML = text;
+  ret.push(...content.children);
   return ret;
 }
 
