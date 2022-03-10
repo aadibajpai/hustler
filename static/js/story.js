@@ -98,7 +98,7 @@ function decodeHTMLEntities(s) {
 // fetch and normalize posts
 async function fetchStory(id) {
   const resp = await fetch(
-    `https://vanderbilthustler.com/wp-json/wp/v2/posts/${id}?_fields=date,title,content,link,featured_media,custom_fields.writer`
+    `https://vanderbilthustler.com/wp-json/wp/v2/posts/${id}?_fields=date,title,content,excerpt,link,featured_media,custom_fields.writer`
   )
     .then((r) => r.json())
     .then((j) => [j]) // put single story in array for compatibility
@@ -159,7 +159,23 @@ function Story(story) {
     return null;
   }
 
-  const { title, custom_fields, link, content, featured_media, date } = story;
+  const { title, custom_fields, link, content, featured_media, date, excerpt } =
+    story;
+  document.title = title.rendered;
+  // add meta tags
+  const meta = {
+    "og:title": title.rendered,
+    "og:description": decodeHTMLEntities(excerpt.rendered),
+    "og:image": featured_media,
+    "og:url": link,
+    author: formatWriters(custom_fields.writer),
+  };
+  for (const key in meta) {
+    const metaTag = document.createElement("meta");
+    metaTag.setAttribute("property", key);
+    metaTag.setAttribute("content", meta[key]);
+    document.head.appendChild(metaTag);
+  }
   return html`<div class="story">
     <a href="${link}" target="_blank">
       <h2 class="story-title">${decodeHTMLEntities(title.rendered)}</h2>
